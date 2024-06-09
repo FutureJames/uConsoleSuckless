@@ -11,17 +11,17 @@ interval=0
 cpu() {
   cpu_val=$(grep -o "^[^ ]*" /proc/loadavg)
 
-  printf "^c$black^ ^b$green^ CPU"
-  printf "^c$white^ ^b$grey^ $cpu_val"
+  printf "^c$green^ ^b$black^  $cpu_val%%"
 }
 
 pkg_updates() {
-  updates=$({ timeout 20 aptitude search '~U' 2>/dev/null || true; } | wc -l)  # apt (ubuntu, debian etc)
+  #updates=$({ timeout 20 aptitude search '~U' 2>/dev/null || true; } | wc -l)
+  updates=$(timeout 20 sudo apt update | awk '/packages can be/ {print $1}')
 
   if [ -z "$updates" ]; then
-    printf "  ^c$green^    Fully Updated"
+    printf "  ^c$white^    Fully Updated"
   else
-    printf "  ^c$green^    $updates"" updates"
+    printf "  ^c$white^    $updates"" updates"
   fi
 }
 
@@ -30,32 +30,38 @@ battery() {
   get_status="$(cat /sys/class/power_supply/axp20x-battery/status)"
 
   if [ "$get_status" = "Charging" ]; then
-    printf "^c$blue^  $get_capacity"
+    printf "^c$green^  $get_capacity"
   else 
-    printf "^c$red^ 󰂀 $get_capacity"
+    printf "^c$blue^ 󰂀 $get_capacity"
   fi  
 }
 
 brightness() {
-  printf "^c$red^   "
-  printf "^c$red^%.0f\n" $(cat /sys/class/backlight/*/brightness)
+  bright_val=$(cat /sys/class/backlight/*/brightness)
+  printf "^c$red^  $bright_val"
 }
 
+
+disk() {
+  disk_val=$(df / | awk '/dev\/root/ {print $5}')
+  printf "^c$white^  $disk_val%"
+}	
+
 mem() {
-  printf "^c$blue^^b$black^  "
-  printf "^c$blue^ $(free -h | awk '/^Mem/ { print $3 }' | sed s/i//g)"
+  mem_val=$(free -h | awk '/^Mem/ { print $3 }' | sed s/i//g)	
+  printf "^c$blue^ ^b$black^  $mem_val"
 }
 
 wlan() {
 	case "$(cat /sys/class/net/wl*/operstate 2>/dev/null)" in
-	up) printf "^c$black^ ^b$blue^ 󰤨 ^d^%s" " ^c$blue^Connected" ;;
-	down) printf "^c$black^ ^b$blue^ 󰤭 ^d^%s" " ^c$blue^Disconnected" ;;
+	up) printf "^c$blue^ ^b$black^ 󰤨 ^d^%s" " ^c$blue^Connected" ;;
+	down) printf "^c$blue^ ^b$black^ 󰤯 ^d^%s" " ^c$blue^Disconnected" ;;
 	esac
 }
 
 clock() {
-	printf "^c$black^ ^b$darkblue^ 󱑆 "
-	printf "^c$black^^b$blue^ $(date '+%H:%M')  "
+	clock_val=$(date '+%H:%M')
+	printf "^c$darkblue^ ^b$black^ 󱑆 $clock_val"
 }
 
 while true; do
@@ -63,5 +69,5 @@ while true; do
   [ $interval = 0 ] || [ $(($interval % 3600)) = 0 ] && updates=$(pkg_updates)
   interval=$((interval + 1))
 
-  sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(cpu) $(mem) $(wlan) $(clock)"
+  sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
 done
