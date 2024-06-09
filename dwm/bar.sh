@@ -6,7 +6,7 @@
 interval=0
 
 # load colors
-. ~/.uConsoleSuckless/dwm/bar_themes/onedark
+. ~/Documents/uConsoleSuckless/dwm/bar_themes/onedark
 
 cpu() {
   cpu_val=$(grep -o "^[^ ]*" /proc/loadavg)
@@ -16,8 +16,6 @@ cpu() {
 }
 
 pkg_updates() {
-  #updates=$({ timeout 20 doas xbps-install -un 2>/dev/null || true; } | wc -l) # void
-  # updates=$({ timeout 20 checkupdates 2>/dev/null || true; } | wc -l) # arch
   updates=$({ timeout 20 aptitude search '~U' 2>/dev/null || true; } | wc -l)  # apt (ubuntu, debian etc)
 
   if [ -z "$updates" ]; then
@@ -29,7 +27,13 @@ pkg_updates() {
 
 battery() {
   get_capacity="$(cat /sys/class/power_supply/axp20x-battery/capacity)"
-  printf "^c$blue^   $get_capacity"
+  get_status="$(cat /sys/class/power_supply/axp20x-battery/status)"
+
+  if [ "$get_status" = "Charging" ]; then
+    printf "^c$blue^  $get_capacity"
+  else 
+    printf "^c$red^ 󰂀 $get_capacity"
+  fi  
 }
 
 brightness() {
