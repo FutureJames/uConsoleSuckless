@@ -2663,8 +2663,8 @@ void run(void) {
 void
 runAutostart(void) 
 {
-	system("cd ~/.ucsl; ./autostart_blocking.sh");
-	system("cd ~/.ucsl; ./autostart.sh &");
+	system("cd /usr/local/bin; ./autostart_blocking.sh");
+	system("cd /usr/local/bin; ./autostart.sh &");
 }
 
 void scan(void) {

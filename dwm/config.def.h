@@ -31,8 +31,8 @@ static const int colorfultag        = 1;        /* 0 means use SchemeSel for sel
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
 static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
 static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
-static const char *light_up[] =   {"/home/james/.ucsl/brightness.sh", "-up", NULL};
-static const char *light_down[] = {"/home/james/.ucsl/brightness.sh", "-down", NULL}; 
+static const char *light_up[] =   {"/usr/local/bin/brightness.sh", "-up", NULL};
+static const char *light_down[] = {"/usr/local/bin/brightness.sh", "-down", NULL}; 
 static const int new_window_attach_on_end = 0; /*  1 means the new window will attach on the end; 0 means the new window will attach on the front,default is front */
 #define ICONSIZE 19   /* icon size */
 #define ICONSPACING 8 /* space between icon and title */
@@ -148,6 +148,9 @@ static const Key keys[] = {
         SHCMD("maim | xclip -selection clipboard -t image/png")},
     {MODKEY,                            XK_u,       spawn,
         SHCMD("maim --select | xclip -selection clipboard -t image/png")},
+
+    // Print Screen
+    { 0,                 XK_Print,                  spawn,          SHCMD("scrot -e 'mv $f ~/Pictures/'")},
 
     { MODKEY,                           XK_c,       spawn,          SHCMD("rofi -show drun") },
     { MODKEY,                           XK_Return,  spawn,          SHCMD("st")},

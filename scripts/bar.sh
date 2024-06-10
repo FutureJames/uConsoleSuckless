@@ -42,6 +42,12 @@ brightness() {
 }
 
 
+audio() {
+  audio_val=$(amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }')
+  printf "^c$green^^b$black^ 󰕾 $audio_val"
+
+}
+
 disk() {
   disk_val=$(df / | awk '/dev\/root/ {print $5}')
   printf "^c$white^  $disk_val%"
@@ -67,10 +73,9 @@ clock() {
 
 while true; do
 
-  sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
+	sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(audio) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
 
   [ $interval = 0 ] || [ $(($interval % 3600)) = 0 ] && updates=$(pkg_updates)
   interval=$((interval + 1))
 
-  #sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
 done

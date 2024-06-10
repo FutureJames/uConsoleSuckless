@@ -2,4 +2,4 @@
 logger "Running Autostart script" &
 feh --bg-fill ~/.ucsl/wallpapers/wall_3.jpg &
 picom &
-~/.ucsl/bar.sh &
+./bar.sh &
