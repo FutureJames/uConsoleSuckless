@@ -31,8 +31,8 @@ static const int colorfultag        = 1;        /* 0 means use SchemeSel for sel
 static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
 static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
 static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
-static const char *light_up[] =   {"/home/james/Documents/uConsoleSuckless/brightness.sh", "-up", NULL};
-static const char *light_down[] = {"/home/james/Documents/uConsoleSuckless/brightness.sh", "-down", NULL}; 
+static const char *light_up[] =   {"/home/james/.ucsl/brightness.sh", "-up", NULL};
+static const char *light_down[] = {"/home/james/.ucsl/brightness.sh", "-down", NULL}; 
 static const int new_window_attach_on_end = 0; /*  1 means the new window will attach on the end; 0 means the new window will attach on the front,default is front */
 #define ICONSIZE 19   /* icon size */
 #define ICONSPACING 8 /* space between icon and title */
@@ -62,7 +62,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static char *tags[] = {"", "", "", "", ""};
+static char *tags[] = {"", "x", "y", "", ""};
 
 static const char* eww[] = { "eww", "open" , "eww", NULL };
 

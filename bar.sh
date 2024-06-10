@@ -6,7 +6,7 @@
 interval=0
 
 # load colors
-. ~/Documents/uConsoleSuckless/dwm/bar_themes/onedark
+. ~/.ucsl/bar_themes/onedark
 
 cpu() {
   cpu_val=$(grep -o "^[^ ]*" /proc/loadavg)
@@ -32,7 +32,7 @@ battery() {
   if [ "$get_status" = "Charging" ]; then
     printf "^c$green^  $get_capacity"
   else 
-    printf "^c$blue^ 󰂀 $get_capacity"
+    printf "^c$white^ 󰂀 $get_capacity"
   fi  
 }
 
@@ -53,9 +53,10 @@ mem() {
 }
 
 wlan() {
-	case "$(cat /sys/class/net/wl*/operstate 2>/dev/null)" in
-	up) printf "^c$blue^ ^b$black^ 󰤨 ^d^%s" " ^c$blue^Connected" ;;
-	down) printf "^c$blue^ ^b$black^ 󰤯 ^d^%s" " ^c$blue^Disconnected" ;;
+  wifi_val=$(cat /sys/class/net/wl*/operstate 2>/dev/null)	
+	case "$wifi_val" in
+	  up)      printf "^c$blue^ ^b$black^ 󰤨 ^d^%s" " ^c$blue^Connected" ;;
+          dormant) printf "^c$blue^ ^b$black^ 󰤯 ^d^%s" " ^c$blue^NoConnect" ;;
 	esac
 }
 
@@ -66,8 +67,10 @@ clock() {
 
 while true; do
 
+  sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
+
   [ $interval = 0 ] || [ $(($interval % 3600)) = 0 ] && updates=$(pkg_updates)
   interval=$((interval + 1))
 
-  sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
+  #sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
 done

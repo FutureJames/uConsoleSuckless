@@ -1,6 +1,5 @@
 #!/bin/bash
-logger "autostart logs begin" &
-feh --bg-fill ~/Documents/uConsoleSuckless/dwm/wall/test.jpg &
+logger "Running Autostart script" &
+feh --bg-fill ~/.ucsl/wallpapers/wall_3.jpg &
 picom &
-#dash ~/.dwm/bar.sh &
-~/Documents/uConsoleSuckless/dwm/bar.sh &
+~/.ucsl/bar.sh &

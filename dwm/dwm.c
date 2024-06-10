@@ -2663,8 +2663,8 @@ void run(void) {
 void
 runAutostart(void) 
 {
-	system("cd ~/Documents/uConsoleSuckless/dwm; ./autostart_blocking.sh");
-	system("cd ~/Documents/uConsoleSuckless/dwm; ./autostart.sh &");
+	system("cd ~/.ucsl; ./autostart_blocking.sh");
+	system("cd ~/.ucsl; ./autostart.sh &");
 }
 
 void scan(void) {
