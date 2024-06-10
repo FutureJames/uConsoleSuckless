@@ -1,3 +1,4 @@
+![screenshot](/2024-06-09-221228_1280x720_scrot.png?raw=true "Screenshot")
 
 ## Getting the Base system installed
 Flash to SD card:
