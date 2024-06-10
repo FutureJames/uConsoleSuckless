@@ -169,7 +169,7 @@ Reboot device
 sudo reboot
 ```
 
-Final Software update? (might be risky) (seems to be working so far)
+Final Software update? (you might have to reconnect to wifi)
 ```
 sudo apt update
 sudo apt upgrade
