@@ -34,10 +34,10 @@ static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "togg
 static const char *light_up[] =   {"/usr/local/bin/brightness.sh", "-up", NULL};
 static const char *light_down[] = {"/usr/local/bin/brightness.sh", "-down", NULL}; 
 static const int new_window_attach_on_end = 0; /*  1 means the new window will attach on the end; 0 means the new window will attach on the front,default is front */
-#define ICONSIZE 19   /* icon size */
+#define ICONSIZE 22   /* icon size */
 #define ICONSPACING 8 /* space between icon and title */
 
-static const char *fonts[]          = {"Iosevka:style:medium:size=12" ,"JetBrainsMono Nerd Font Mono:style:medium:size=19" };
+static const char *fonts[]          = {"BigBlueTerm437NerdFont:style:regular:size=9"};
 
 // theme
 #include "themes/onedark.h"
@@ -236,7 +236,7 @@ static const Key keys[] = {
     { MODKEY,                           XK_q,       killclient,     {0} },
 
     // restart
-    { MODKEY|ShiftMask,                 XK_r,       restart,           {0} },
+    { MODKEY,                 XK_r,       restart,           {0} },
 
     // hide & restore windows
     { MODKEY,                           XK_e,       hidewin,        {0} },

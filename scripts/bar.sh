@@ -15,7 +15,6 @@ cpu() {
 }
 
 pkg_updates() {
-  #updates=$({ timeout 20 aptitude search '~U' 2>/dev/null || true; } | wc -l)
   updates=$(timeout 20 sudo apt update | awk '/packages can be/ {print $1}')
 
   if [ -z "$updates" ]; then
@@ -38,37 +37,46 @@ battery() {
 
 brightness() {
   bright_val=$(cat /sys/class/backlight/*/brightness)
-  printf "^c$red^  $bright_val"
+  
+  printf "^c$red^ 󰃟 $bright_val"
 }
 
 
 audio() {
   audio_val=$(amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }')
-  printf "^c$green^^b$black^ 󰕾 $audio_val"
-
+   mute_val=$(amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $4 }')
+  
+  case "$mute_val" in
+    on)  printf "^c$green^^b$black^ 󰕾 $audio_val" ;;
+    off) printf "^c$green^^b$black^ 󰝟 " ;;
+  esac
 }
 
 disk() {
   disk_val=$(df / | awk '/dev\/root/ {print $5}')
+  
   printf "^c$white^  $disk_val%"
 }	
 
 mem() {
   mem_val=$(free -h | awk '/^Mem/ { print $3 }' | sed s/i//g)	
+  
   printf "^c$blue^ ^b$black^  $mem_val"
 }
 
 wlan() {
   wifi_val=$(cat /sys/class/net/wl*/operstate 2>/dev/null)	
-	case "$wifi_val" in
-	  up)      printf "^c$blue^ ^b$black^ 󰤨 ^d^%s" " ^c$blue^Connected" ;;
-          dormant) printf "^c$blue^ ^b$black^ 󰤯 ^d^%s" " ^c$blue^NoConnect" ;;
-	esac
+
+  case "$wifi_val" in
+    up)      printf "^c$blue^ ^b$black^ 󰤨 ^d^%s" " ^c$blue^Connected" ;;
+    dormant) printf "^c$blue^ ^b$black^ 󰤯 ^d^%s" " ^c$blue^NoConnect" ;;
+  esac
 }
 
 clock() {
-	clock_val=$(date '+%H:%M')
-	printf "^c$darkblue^ ^b$black^ 󱑆 $clock_val"
+  clock_val=$(date '+%H:%M')
+  
+  printf "^c$darkblue^ ^b$black^ 󱑆 $clock_val"
 }
 
 while true; do
