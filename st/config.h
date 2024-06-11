@@ -6,7 +6,7 @@
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
 
-static char font[] = "BigBlueTerm437NerdFontMono-Regular:pixelsize=25:lcdfilter=lcddefault:hintstyle=hintnone:rgba=rgb:antialias=true:autohint=false";
+static char font[] = "BigBlueTerm437NerdFontMono-Regular:pixelsize=15:lcdfilter=lcddefault:hintstyle=hintnone:rgba=rgb:antialias=true:autohint=false";
 
 static int borderpx = 0;
 static char shell[] = "/bin/zsh";
