@@ -9,9 +9,9 @@ interval=0
 . ~/.ucsl/bar_themes/onedark
 
 cpu() {
-  cpu_val=$(grep -o "^[^ ]*" /proc/loadavg)
-
-  printf "^c$green^ ^b$black^  $cpu_val%%"
+  cpu_avg=$(grep -o "^[^ ]*" /proc/loadavg)
+  cpu_val=$(mpstat | grep all | awk '{printf("%.0f\n", 100-$13)}')
+  printf "^c$green^ ^b$black^  $cpu_avg%%"
 }
 
 pkg_updates() {
@@ -29,9 +29,9 @@ battery() {
   get_status="$(cat /sys/class/power_supply/axp20x-battery/status)"
 
   if [ "$get_status" = "Charging" ]; then
-    printf "^c$green^  $get_capacity"
+    printf "^c$green^  $get_capacity%%"
   else 
-    printf "^c$white^ 󰂀 $get_capacity"
+    printf "^c$white^ 󰂀 $get_capacity%%"
   fi  
 }
 
@@ -59,17 +59,17 @@ disk() {
 }	
 
 mem() {
-  mem_val=$(free -h | awk '/^Mem/ { print $3 }' | sed s/i//g)	
-  
-  printf "^c$blue^ ^b$black^  $mem_val"
+  mem_per=$(free | grep Mem | awk '{printf("%.0f\n", (1-($7/$2)) * 100)}')
+  printf "^c$blue^ ^b$black^  $mem_per%%"
 }
 
 wlan() {
-  wifi_val=$(cat /sys/class/net/wl*/operstate 2>/dev/null)	
+  wifi_val=$(cat /sys/class/net/wlan0/operstate 2>/dev/null)	
 
   case "$wifi_val" in
     up)      printf "^c$blue^ ^b$black^ 󰤨 ^d^%s" " ^c$blue^Connected" ;;
     dormant) printf "^c$blue^ ^b$black^ 󰤯 ^d^%s" " ^c$blue^NoConnect" ;;
+    down)    printf "^c$blue^ ^b$black^ 󰤯 ^d^%s" " ^c$blue^NoConnect" ;;
   esac
 }
 

@@ -28,11 +28,11 @@ static const int horizpadtabo       = 15;
 static const int scalepreview       = 4;
 static const int tag_preview        = 0;        /* 1 means enable, 0 is off */
 static const int colorfultag        = 1;        /* 0 means use SchemeSel for selected non vacant tag */
-static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
-static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
-static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
-static const char *light_up[] =   {"/usr/local/bin/brightness.sh", "-up", NULL};
-static const char *light_down[] = {"/usr/local/bin/brightness.sh", "-down", NULL}; 
+static const char *upvol[]          = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
+static const char *downvol[]        = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
+static const char *mutevol[]        = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
+static const char *light_up[]       =   {"/usr/local/bin/brightness.sh", "-up", NULL};
+static const char *light_down[]     = {"/usr/local/bin/brightness.sh", "-down", NULL}; 
 static const int new_window_attach_on_end = 0; /*  1 means the new window will attach on the end; 0 means the new window will attach on the front,default is front */
 #define ICONSIZE 22   /* icon size */
 #define ICONSPACING 8 /* space between icon and title */
@@ -62,13 +62,13 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static char *tags[] = {"", "x", "y", "", ""};
+static char *tags[] = {"", "󰖟", "", "", "󰻞"};
 
 static const char* eww[] = { "eww", "open" , "eww", NULL };
 
 static const Launcher launchers[] = {
     /* command     name to display */
-    { eww,         "" },
+    { eww,         "󰣚" }, // μ
 };
 
 static const int tagschemes[] = {
@@ -86,15 +86,17 @@ static const Rule rules[] = {
      *	WM_NAME(STRING) = title
      */
     /* class      instance    title       tags mask     iscentered   isfloating   monitor */
-    { "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
-    { "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           -1 },
-    { "eww",      NULL,       NULL,       0,            0,           1,           -1 },
+    { "Surf",       NULL,      NULL,       1 << 1,       0,           0,           -1 },
+    { "Firefox",    NULL,      NULL,       1 << 1,       0,           0,           -1 },
+    { "qutebrowser",NULL,      NULL,       1 << 1,       0,           0,           -1 },
+    { "ranger",     NULL,      NULL,       1 << 2,       0,           0,           -1 },
+    { "mc",         NULL,      NULL,       1 << 2,       0,           0,           -1 },
 };
 
 /* layout(s) */
-static const float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+static const float mfact        = 0.50; /* factor of master area size [0.05..0.95] */
+static const int nmaster        = 1;    /* number of clients in master area */
+static const int resizehints    = 0;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
@@ -144,19 +146,24 @@ static const Key keys[] = {
     {0,			XF86XK_MonBrightnessDown,   spawn,	    {.v = light_down}},
 
     // screenshot fullscreen and cropped
-    {MODKEY|ControlMask,                XK_u,       spawn,
-        SHCMD("maim | xclip -selection clipboard -t image/png")},
-    {MODKEY,                            XK_u,       spawn,
-        SHCMD("maim --select | xclip -selection clipboard -t image/png")},
+//    {MODKEY|ControlMask,                XK_u,       spawn,
+//        SHCMD("maim | xclip -selection clipboard -t image/png")},
+//    {MODKEY,                            XK_u,       spawn,
+//        SHCMD("maim --select | xclip -selection clipboard -t image/png")},
 
-    // Print Screen
-    { 0,                 XK_Print,                  spawn,          SHCMD("scrot -e 'mv $f ~/Pictures/'")},
+    // Screenshot
+    { 0,                                XK_Print,   spawn,          SHCMD("scrot -e 'mv $f ~/Pictures/'")},
 
-    { MODKEY,                           XK_c,       spawn,          SHCMD("rofi -show drun") },
+    { MODKEY,                           XK_z,       spawn,          SHCMD("rofi -show drun") },
     { MODKEY,                           XK_Return,  spawn,          SHCMD("st")},
+    { MODKEY,                           XK_x,       spawn,          SHCMD("surf http://gogle.com")},
+    { MODKEY,                           XK_n,       spawn,          SHCMD("st -e ranger")},
+    { MODKEY,                           XK_b,       spawn,          SHCMD("st -e mc")},
+    { MODKEY,                           XK_v,       spawn,          SHCMD("qutebrowser")},
+    { MODKEY,                           XK_c,       spawn,          SHCMD("firefox")},
 
     // toggle stuff
-    { MODKEY,                           XK_b,       togglebar,      {0} },
+    { MODKEY|ShiftMask,                 XK_b,       togglebar,      {0} },
     { MODKEY|ControlMask,               XK_t,       togglegaps,     {0} },
     { MODKEY|ShiftMask,                 XK_space,   togglefloating, {0} },
     { MODKEY,                           XK_f,       togglefullscr,  {0} },
@@ -230,13 +237,13 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,                 XK_w,       setborderpx,    {.i = default_border } },
 
     // kill dwm
-    { MODKEY|ControlMask,               XK_q,       spawn,        SHCMD("killall bar.sh chadwm") },
+    { MODKEY|ControlMask,               XK_q,       spawn,          SHCMD("killall bar.sh dwm") },
 
     // kill window
     { MODKEY,                           XK_q,       killclient,     {0} },
 
     // restart
-    { MODKEY,                 XK_r,       restart,           {0} },
+    { MODKEY,                           XK_r,       restart,        {0} },
 
     // hide & restore windows
     { MODKEY,                           XK_e,       hidewin,        {0} },
