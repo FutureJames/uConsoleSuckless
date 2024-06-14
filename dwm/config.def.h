@@ -28,11 +28,6 @@ static const int horizpadtabo       = 15;
 static const int scalepreview       = 4;
 static const int tag_preview        = 0;        /* 1 means enable, 0 is off */
 static const int colorfultag        = 1;        /* 0 means use SchemeSel for selected non vacant tag */
-static const char *upvol[]          = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
-static const char *downvol[]        = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
-static const char *mutevol[]        = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
-static const char *light_up[]       =   {"/usr/local/bin/brightness.sh", "-up", NULL};
-static const char *light_down[]     = {"/usr/local/bin/brightness.sh", "-down", NULL}; 
 static const int new_window_attach_on_end = 0; /*  1 means the new window will attach on the end; 0 means the new window will attach on the front,default is front */
 #define ICONSIZE 22   /* icon size */
 #define ICONSPACING 8 /* space between icon and title */
@@ -118,7 +113,6 @@ static const Layout layouts[] = {
     { ":::",      gaplessgrid },
     { "|M|",      centeredmaster },
     { ">M>",      centeredfloatingmaster },
-    { "><>",      NULL },    /* no layout function means floating behavior */
     { NULL,       NULL },
 };
 
@@ -138,121 +132,104 @@ static const Layout layouts[] = {
 static const Key keys[] = {
     /* modifier                         key         function        argument */
 
-    // brightness and audio 
-    {0,                 XF86XK_AudioLowerVolume,    spawn,          {.v = downvol}},
-    {0,                 XF86XK_AudioMute,           spawn,          {.v = mutevol }},
-    {0,                 XF86XK_AudioRaiseVolume,    spawn,          {.v = upvol}},
-    {0,			XF86XK_MonBrightnessUp,	    spawn,	    {.v = light_up}},
-    {0,			XF86XK_MonBrightnessDown,   spawn,	    {.v = light_down}},
-
-    // Screenshot
+    // audio 
+    {0,                 XF86XK_AudioLowerVolume,    spawn,          SHCMD("/usr/bin/pactl set-sink-volume 0 -5%")},
+    {0,                 XF86XK_AudioMute,           spawn,          SHCMD("/usr/bin/pactl set-sink-mute 0 toggle")},
+    {0,                 XF86XK_AudioRaiseVolume,    spawn,          SHCMD("/usr/bin/pactl set-sink-volume 0 +5%")},
+    
+    // brightness
+    {0,			XF86XK_MonBrightnessUp,	    spawn,	    SHCMD("/usr/local/bin/brightness.sh -up")},
+    {0,			XF86XK_MonBrightnessDown,   spawn,	    SHCMD("/usr/local/bin/brightness.sh -down")},
+    
+    // screenshot
     { 0,                                XK_Print,   spawn,          SHCMD("scrot -e 'mv $f ~/Pictures/'")},
 
-    { MODKEY,                           XK_z,       spawn,          SHCMD("rofi -show drun") },
+    // quick launch
     { MODKEY,                           XK_Return,  spawn,          SHCMD("st")},
+    { MODKEY,                           XK_z,       spawn,          SHCMD("rofi -show drun") },
     { MODKEY,                           XK_x,       spawn,          SHCMD("surf http://gogle.com")},
-    { MODKEY,                           XK_n,       spawn,          SHCMD("st -e ranger")},
-    { MODKEY,                           XK_b,       spawn,          SHCMD("st -e mc")},
-    { MODKEY,                           XK_v,       spawn,          SHCMD("qutebrowser")},
     { MODKEY,                           XK_c,       spawn,          SHCMD("firefox")},
+    { MODKEY,                           XK_v,       spawn,          SHCMD("qutebrowser")},
+    { MODKEY,                           XK_b,       spawn,          SHCMD("st -e mc")},
+    { MODKEY,                           XK_n,       spawn,          SHCMD("qutebrowser")},
+    { MODKEY,                           XK_m,       spawn,          SHCMD("firefox")},
 
-    // toggle stuff
+    // toggle top bar
     { MODKEY|ShiftMask,                 XK_b,       togglebar,      {0} },
-    { MODKEY|ControlMask,               XK_t,       togglegaps,     {0} },
-    { MODKEY|ShiftMask,                 XK_space,   togglefloating, {0} },
+
+    // toggle full screen 
     { MODKEY,                           XK_f,       togglefullscr,  {0} },
 
-    { MODKEY|ControlMask,               XK_w,       tabmode,        { -1 } },
+    //{ MODKEY|ControlMask,               XK_w,       tabmode,        { -1 } },
+    // switch between windows
     { MODKEY,                           XK_Up,       focusstack,     {.i = +1 } },
     { MODKEY,                           XK_Down,       focusstack,     {.i = -1 } },
+    
+    // change vert/hori window placement
     { MODKEY,                           XK_i,       incnmaster,     {.i = +1 } },
     { MODKEY,                           XK_d,       incnmaster,     {.i = -1 } },
 
-    // shift desktop tag view
+    // rotate between desktop tag view
     { MODKEY,                           XK_Left,    shiftview,      {.i = -1 } },
     { MODKEY,                           XK_Right,   shiftview,      {.i = +1 } },
 
-    // change m,cfact sizes 
+    // move window divider left and right 
     { MODKEY,                           XK_h,       setmfact,       {.f = -0.05} },
     { MODKEY,                           XK_l,       setmfact,       {.f = +0.05} },
+
+    // move window divider up and down
     { MODKEY|ShiftMask,                 XK_h,       setcfact,       {.f = +0.25} },
     { MODKEY|ShiftMask,                 XK_l,       setcfact,       {.f = -0.25} },
-    { MODKEY|ShiftMask,                 XK_o,       setcfact,       {.f =  0.00} },
 
+    // reset horizontal window dividers
+    //{ MODKEY|ShiftMask,                 XK_o,       setcfact,       {.f =  0.00} },
 
     // switch window position
-    { MODKEY|ControlMask,                 XK_Down,       movestack,      {.i = +1 } },
+    { MODKEY|ControlMask,                 XK_Down,     movestack,      {.i = +1 } },
     { MODKEY|ControlMask,                 XK_Up,       movestack,      {.i = -1 } },
-    { MODKEY|ShiftMask,                 XK_Return,  zoom,           {0} },
-    { MODKEY,                           XK_Tab,     view,           {0} },
+    //{ MODKEY|ShiftMask,                 XK_Return,  zoom,           {0} },
+    //{ MODKEY,                           XK_Tab,     view,           {0} },
 
-    // overall gaps
-    { MODKEY|ControlMask,               XK_i,       incrgaps,       {.i = +1 } },
-    { MODKEY|ControlMask,               XK_d,       incrgaps,       {.i = -1 } },
-
-    // inner gaps
-    { MODKEY|ShiftMask,                 XK_i,       incrigaps,      {.i = +1 } },
-    { MODKEY|ControlMask|ShiftMask,     XK_i,       incrigaps,      {.i = -1 } },
-
-    // outer gaps
-    { MODKEY|ControlMask,               XK_o,       incrogaps,      {.i = +1 } },
-    { MODKEY|ControlMask|ShiftMask,     XK_o,       incrogaps,      {.i = -1 } },
-
-    // inner+outer hori, vert gaps 
-    { MODKEY|ControlMask,               XK_6,       incrihgaps,     {.i = +1 } },
-    { MODKEY|ControlMask|ShiftMask,     XK_6,       incrihgaps,     {.i = -1 } },
-    { MODKEY|ControlMask,               XK_7,       incrivgaps,     {.i = +1 } },
-    { MODKEY|ControlMask|ShiftMask,     XK_7,       incrivgaps,     {.i = -1 } },
-    { MODKEY|ControlMask,               XK_8,       incrohgaps,     {.i = +1 } },
-    { MODKEY|ControlMask|ShiftMask,     XK_8,       incrohgaps,     {.i = -1 } },
-    { MODKEY|ControlMask,               XK_9,       incrovgaps,     {.i = +1 } },
-    { MODKEY|ControlMask|ShiftMask,     XK_9,       incrovgaps,     {.i = -1 } },
-
-    { MODKEY|ControlMask|ShiftMask,     XK_d,       defaultgaps,    {0} },
-
-    // layout
+    // standard layout
     { MODKEY,                           XK_t,       setlayout,      {.v = &layouts[0]} },
+    
+    // full screen with bar at bottom
     { MODKEY|ShiftMask,                 XK_f,       setlayout,      {.v = &layouts[1]} },
-    { MODKEY,                           XK_m,       setlayout,      {.v = &layouts[2]} },
+    // spiral windows
+    { MODKEY|ControlMask,               XK_m,       setlayout,      {.v = &layouts[2]} },
+    // grid layout
     { MODKEY|ControlMask,               XK_g,       setlayout,      {.v = &layouts[10]} },
-    { MODKEY|ControlMask|ShiftMask,     XK_t,       setlayout,      {.v = &layouts[13]} },
+    
+    // toggle last two layouts
     { MODKEY,                           XK_space,   setlayout,      {0} },
-    { MODKEY|ControlMask,               XK_comma,   cyclelayout,    {.i = -1 } },
-    { MODKEY|ControlMask,               XK_period,  cyclelayout,    {.i = +1 } },
+  
+    // cycle between all layouts in the layout array
+    { MODKEY,               XK_comma,   cyclelayout,    {.i = -1 } },
+    { MODKEY,               XK_period,  cyclelayout,    {.i = +1 } },
+
+    // ? does something with adding windows to other tags (desktops)
     { MODKEY,                           XK_0,       view,           {.ui = ~0 } },
     { MODKEY|ShiftMask,                 XK_0,       tag,            {.ui = ~0 } },
-    { MODKEY,                           XK_comma,   focusmon,       {.i = -1 } },
-    { MODKEY,                           XK_period,  focusmon,       {.i = +1 } },
-    { MODKEY|ShiftMask,                 XK_comma,   tagmon,         {.i = -1 } },
-    { MODKEY|ShiftMask,                 XK_period,  tagmon,         {.i = +1 } },
 
-    // change border size
-    { MODKEY|ShiftMask,                 XK_minus,   setborderpx,    {.i = -1 } },
-    { MODKEY|ShiftMask,                 XK_p,       setborderpx,    {.i = +1 } },
-    { MODKEY|ShiftMask,                 XK_w,       setborderpx,    {.i = default_border } },
-
-    // kill dwm
+    // kill dwm 
     { MODKEY|ControlMask,               XK_q,       spawn,          SHCMD("killall bar.sh dwm") },
 
     // kill window
     { MODKEY,                           XK_q,       killclient,     {0} },
 
-    // restart
+    // restart and return to login
     { MODKEY,                           XK_r,       restart,        {0} },
 
-    // hide & restore windows
+    // hide & restore windows  is this really useful
     { MODKEY,                           XK_e,       hidewin,        {0} },
     { MODKEY|ShiftMask,                 XK_e,       restorewin,     {0} },
 
+    // buttons to switch directly to tag (desktop)
     TAGKEYS(                            XK_1,                       0)
     TAGKEYS(                            XK_2,                       1)
     TAGKEYS(                            XK_3,                       2)
     TAGKEYS(                            XK_4,                       3)
     TAGKEYS(                            XK_5,                       4)
-    TAGKEYS(                            XK_6,                       5)
-    TAGKEYS(                            XK_7,                       6)
-    TAGKEYS(                            XK_8,                       7)
-    TAGKEYS(                            XK_9,                       8)
 };
 
 /* button definitions */

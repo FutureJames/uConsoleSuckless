@@ -10,8 +10,8 @@ interval=0
 
 cpu() {
   cpu_avg=$(grep -o "^[^ ]*" /proc/loadavg)
-  cpu_val=$(mpstat | grep all | awk '{printf("%.0f\n", 100-$13)}')
-  printf "^c$green^ ^b$black^  $cpu_avg%%"
+  cpu_per=$(mpstat | grep all | awk '{printf("%.0f\n", 100-$13)}')
+  printf "^c$green^ ^b$black^  $cpu_per%%"
 }
 
 pkg_updates() {
@@ -48,7 +48,7 @@ audio() {
   
   case "$mute_val" in
     on)  printf "^c$green^^b$black^ 󰕾 $audio_val" ;;
-    off) printf "^c$green^^b$black^ 󰝟 X " ;;
+    off) printf "^c$green^^b$black^ 󰸈 X " ;; # 󰕾 󰕿 󰖀 󰝞 󰝟 󰖁 󰝝 󱄠 󱄡 󰸈
   esac
 }
 

@@ -250,7 +250,7 @@ static void cyclelayout(const Arg *arg);
 static void destroynotify(XEvent *e);
 static void detach(Client *c);
 static void detachstack(Client *c);
-static Monitor *dirtomon(int dir);
+//static Monitor *dirtomon(int dir);
 static void dragmfact(const Arg *arg);
 static void dragcfact(const Arg *arg);
 static void drawbar(Monitor *m);
@@ -262,7 +262,7 @@ static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static void focus(Client *c);
 static void focusin(XEvent *e);
-static void focusmon(const Arg *arg);
+//static void focusmon(const Arg *arg);
 static void focusstack(const Arg *arg);
 static void focuswin(const Arg *arg);
 static Atom getatomprop(Client *c, Atom prop);
@@ -304,7 +304,7 @@ static void scan(void);
 static int sendevent(Window w, Atom proto, int m, long d0, long d1, long d2,
                      long d3, long d4);
 static void sendmon(Client *c, Monitor *m);
-static void setborderpx(const Arg *arg);
+//static void setborderpx(const Arg *arg);
 static void setclientstate(Client *c, long state);
 static void setclienttagprop(Client *c);
 static void setcurrentdesktop(void);
@@ -325,9 +325,9 @@ static void sigchld(int unused);
 static void spawn(const Arg *arg);
 static void switchtag(void);
 static Monitor *systraytomon(Monitor *m);
-static void tabmode(const Arg *arg);
+//static void tabmode(const Arg *arg);
 static void tag(const Arg *arg);
-static void tagmon(const Arg *arg);
+//static void tagmon(const Arg *arg);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void togglefullscr(const Arg *arg);
@@ -1030,20 +1030,20 @@ void detachstack(Client *c) {
   }
 }
 
-Monitor *dirtomon(int dir) {
-  Monitor *m = NULL;
-
-  if (dir > 0) {
-    if (!(m = selmon->next))
-      m = mons;
-  } else if (selmon == mons)
-    for (m = mons; m->next; m = m->next)
-      ;
-  else
-    for (m = mons; m->next != selmon; m = m->next)
-      ;
-  return m;
-}
+//Monitor *dirtomon(int dir) {
+//  Monitor *m = NULL;
+//
+//  if (dir > 0) {
+//    if (!(m = selmon->next))
+//      m = mons;
+//  } else if (selmon == mons)
+//    for (m = mons; m->next; m = m->next)
+//      ;
+//  else
+//    for (m = mons; m->next != selmon; m = m->next)
+//      ;
+//  return m;
+//}
 
 int drawstatusbar(Monitor *m, int bh, char *stext) {
   int ret, i, w, x, len;
@@ -1775,17 +1775,17 @@ void focusin(XEvent *e) {
     setfocus(selmon->sel);
 }
 
-void focusmon(const Arg *arg) {
-  Monitor *m;
-
-  if (!mons->next)
-    return;
-  if ((m = dirtomon(arg->i)) == selmon)
-    return;
-  unfocus(selmon->sel, 0);
-  selmon = m;
-  focus(NULL);
-}
+//void focusmon(const Arg *arg) {
+//  Monitor *m;
+//
+//  if (!mons->next)
+//    return;
+//  if ((m = dirtomon(arg->i)) == selmon)
+//    return;
+//  unfocus(selmon->sel, 0);
+//  selmon = m;
+//  focus(NULL);
+//}
 
 void focusstack(const Arg *arg) {
   Client *c = NULL, *i;
@@ -2708,37 +2708,37 @@ void sendmon(Client *c, Monitor *m) {
   arrange(NULL);
 }
 
-void setborderpx(const Arg *arg) {
-  Client *c;
-  int prev_borderpx = selmon->borderpx;
-
-  if (arg->i == 0)
-    selmon->borderpx = borderpx;
-  else if (selmon->borderpx + arg->i < 0)
-    selmon->borderpx = 0;
-  else
-    selmon->borderpx += arg->i;
-
-  for (c = selmon->clients; c; c = c->next) {
-    if (c->bw + arg->i < 0)
-      c->bw = selmon->borderpx = 0;
-    else
-      c->bw = selmon->borderpx;
-    if (c->isfloating || !selmon->lt[selmon->sellt]->arrange) {
-      if (arg->i != 0 && prev_borderpx + arg->i >= 0)
-        resize(c, c->x, c->y, c->w - (arg->i * 2), c->h - (arg->i * 2), 0);
-      else if (arg->i != 0)
-        resizeclient(c, c->x, c->y, c->w, c->h);
-      else if (prev_borderpx > borderpx)
-        resize(c, c->x, c->y, c->w + 2 * (prev_borderpx - borderpx),
-               c->h + 2 * (prev_borderpx - borderpx), 0);
-      else if (prev_borderpx < borderpx)
-        resize(c, c->x, c->y, c->w - 2 * (borderpx - prev_borderpx),
-               c->h - 2 * (borderpx - prev_borderpx), 0);
-    }
-  }
-  arrange(selmon);
-}
+//void setborderpx(const Arg *arg) {
+//  Client *c;
+//  int prev_borderpx = selmon->borderpx;
+//
+//  if (arg->i == 0)
+//    selmon->borderpx = borderpx;
+//  else if (selmon->borderpx + arg->i < 0)
+//    selmon->borderpx = 0;
+//  else
+//    selmon->borderpx += arg->i;
+//
+//  for (c = selmon->clients; c; c = c->next) {
+//    if (c->bw + arg->i < 0)
+//      c->bw = selmon->borderpx = 0;
+//    else
+//      c->bw = selmon->borderpx;
+//    if (c->isfloating || !selmon->lt[selmon->sellt]->arrange) {
+//      if (arg->i != 0 && prev_borderpx + arg->i >= 0)
+//        resize(c, c->x, c->y, c->w - (arg->i * 2), c->h - (arg->i * 2), 0);
+//      else if (arg->i != 0)
+//        resizeclient(c, c->x, c->y, c->w, c->h);
+//      else if (prev_borderpx > borderpx)
+//        resize(c, c->x, c->y, c->w + 2 * (prev_borderpx - borderpx),
+//               c->h + 2 * (prev_borderpx - borderpx), 0);
+//      else if (prev_borderpx < borderpx)
+//        resize(c, c->x, c->y, c->w - 2 * (borderpx - prev_borderpx),
+//               c->h - 2 * (borderpx - prev_borderpx), 0);
+//    }
+//  }
+//  arrange(selmon);
+//}
 
 void setclientstate(Client *c, long state) {
   long data[] = {state, None};
@@ -3102,15 +3102,14 @@ void switchtag(void) {
 	}
 }
 
-void
-tabmode(const Arg *arg)
-{
-	if(arg && arg->i >= 0)
-		selmon->showtab = arg->ui % showtab_nmodes;
-	else
-		selmon->showtab = (selmon->showtab + 1 ) % showtab_nmodes;
-	arrange(selmon);
-}
+//void tabmode(const Arg *arg)
+//{
+//	if(arg && arg->i >= 0)
+//		selmon->showtab = arg->ui % showtab_nmodes;
+//	else
+//		selmon->showtab = (selmon->showtab + 1 ) % showtab_nmodes;
+//	arrange(selmon);
+//}
 
 void tag(const Arg *arg) {
   Client *c;
@@ -3123,11 +3122,11 @@ void tag(const Arg *arg) {
   }
 }
 
-void tagmon(const Arg *arg) {
-  if (!selmon->sel || !mons->next)
-    return;
-  sendmon(selmon->sel, dirtomon(arg->i));
-}
+//void tagmon(const Arg *arg) {
+//  if (!selmon->sel || !mons->next)
+//    return;
+//  sendmon(selmon->sel, dirtomon(arg->i));
+//}
 
 void togglebar(const Arg *arg) {
   selmon->showbar = selmon->pertag->showbars[selmon->pertag->curtag] = !selmon->showbar;
