@@ -3,7 +3,7 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int default_border = 0;   /* to switch back to default border after dynamic border resizing via keybinds */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
@@ -46,8 +46,8 @@ static const char *colors[][3]      = {
     /*                     fg       bg      border */
     [SchemeNorm]       = { gray3,   black,  gray2 },
     [SchemeSel]        = { gray4,   blue,   blue  },
-    [SchemeTitle]      = { white,   black,  black }, // active window title
-    [TabSel]           = { blue,    gray2,  black },
+    [SchemeTitle]      = { pink,    black,  black }, // active window title in bar
+    [TabSel]           = { pink,    gray2,  black },
     [TabNorm]          = { gray3,   black,  black },
     [SchemeTag]        = { gray3,   black,  black },
     [SchemeTag1]       = { blue,    black,  black },
@@ -76,7 +76,7 @@ static const int tagschemes[] = {
 };
 
 static const unsigned int ulinepad      = 5; /* horizontal padding between the underline and tag */
-static const unsigned int ulinestroke   = 2; /* thickness / height of the underline */
+static const unsigned int ulinestroke   = 3; /* thickness / height of the underline */
 static const unsigned int ulinevoffset  = 0; /* how far above the bottom of the bar the line should appear */
 static const int ulineall               = 0; /* 1 to show underline on all tags, 0 for just the active ones */
 
@@ -97,7 +97,7 @@ static const Rule rules[] = {
 static const float mfact        = 0.50; /* factor of master area size [0.05..0.95] */
 static const int nmaster        = 1;    /* number of clients in master area */
 static const int resizehints    = 0;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const int lockfullscreen = 1;    /* 1 will force focus on the fullscreen window */
 
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
 #include "functions.h"
@@ -145,12 +145,6 @@ static const Key keys[] = {
     {0,			XF86XK_MonBrightnessUp,	    spawn,	    {.v = light_up}},
     {0,			XF86XK_MonBrightnessDown,   spawn,	    {.v = light_down}},
 
-    // screenshot fullscreen and cropped
-//    {MODKEY|ControlMask,                XK_u,       spawn,
-//        SHCMD("maim | xclip -selection clipboard -t image/png")},
-//    {MODKEY,                            XK_u,       spawn,
-//        SHCMD("maim --select | xclip -selection clipboard -t image/png")},
-
     // Screenshot
     { 0,                                XK_Print,   spawn,          SHCMD("scrot -e 'mv $f ~/Pictures/'")},
 
@@ -169,12 +163,12 @@ static const Key keys[] = {
     { MODKEY,                           XK_f,       togglefullscr,  {0} },
 
     { MODKEY|ControlMask,               XK_w,       tabmode,        { -1 } },
-    { MODKEY,                           XK_j,       focusstack,     {.i = +1 } },
-    { MODKEY,                           XK_k,       focusstack,     {.i = -1 } },
+    { MODKEY,                           XK_Up,       focusstack,     {.i = +1 } },
+    { MODKEY,                           XK_Down,       focusstack,     {.i = -1 } },
     { MODKEY,                           XK_i,       incnmaster,     {.i = +1 } },
     { MODKEY,                           XK_d,       incnmaster,     {.i = -1 } },
 
-    // shift view
+    // shift desktop tag view
     { MODKEY,                           XK_Left,    shiftview,      {.i = -1 } },
     { MODKEY,                           XK_Right,   shiftview,      {.i = +1 } },
 
@@ -186,8 +180,9 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,                 XK_o,       setcfact,       {.f =  0.00} },
 
 
-    { MODKEY|ShiftMask,                 XK_j,       movestack,      {.i = +1 } },
-    { MODKEY|ShiftMask,                 XK_k,       movestack,      {.i = -1 } },
+    // switch window position
+    { MODKEY|ControlMask,                 XK_Down,       movestack,      {.i = +1 } },
+    { MODKEY|ControlMask,                 XK_Up,       movestack,      {.i = -1 } },
     { MODKEY|ShiftMask,                 XK_Return,  zoom,           {0} },
     { MODKEY,                           XK_Tab,     view,           {0} },
 

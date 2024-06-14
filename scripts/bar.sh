@@ -48,7 +48,7 @@ audio() {
   
   case "$mute_val" in
     on)  printf "^c$green^^b$black^ 󰕾 $audio_val" ;;
-    off) printf "^c$green^^b$black^ 󰝟 " ;;
+    off) printf "^c$green^^b$black^ 󰝟 X " ;;
   esac
 }
 
