@@ -61,45 +61,70 @@ static char termname[] = "st-256color";
 static unsigned int tabspaces = 4;
 
 /* background opacity */
-static const int alpha = 0xcd;
+static const int alpha = 0xF0; //0xcd
 
 /**
  * Solarized dark scheme (http://ethanschoonover.com/solarized)
  * Terminal colors (16 first used in escape sequence)
  */
+//static const char *colornameBAK[] = {
+//    /* solarized dark */
+//    "#073642",  /*   0: black    */
+//    "#dc322f",  /*   1: red      */
+//    "#859900",  /*   2: green    */
+//    "#b58900",  /*   3: yellow   */
+//    "#268bd2",  /*   4: blue     */
+//    "#d33682",  /*   5: magenta  */
+//    "#2aa198",  /*   6: cyan     */
+//    "#eee8d5",  /*   7: white    */
+//    "#002b36",  /*   8: brblack  */
+//    "#cb4b16",  /*   9: brred    */
+//    "#586e75",  /*  10: brgreen  */
+//    "#657b83",  /*  11: bryellow */
+//    "#839496",  /*  12: brblue   */
+//    "#6c71c4",  /*  13: brmagenta*/
+//    "#93a1a1",  /*  14: brcyan   */
+//    "#fdf6e3",  /*  15: brwhite  */
+//
+//    [255] = 0,  /* other colors follow */
+//
+//    "#000000",  /* 256: background */
+//    "#fbfbfb",  /* 257: foreground */
+//};
+
 static const char *colorname[] = {
-    /* solarized dark */
-    "#073642",  /*   0: black    */
-    "#dc322f",  /*   1: red      */
-    "#859900",  /*   2: green    */
-    "#b58900",  /*   3: yellow   */
-    "#268bd2",  /*   4: blue     */
-    "#d33682",  /*   5: magenta  */
-    "#2aa198",  /*   6: cyan     */
-    "#eee8d5",  /*   7: white    */
-    "#002b36",  /*   8: brblack  */
-    "#cb4b16",  /*   9: brred    */
-    "#586e75",  /*  10: brgreen  */
-    "#657b83",  /*  11: bryellow */
-    "#839496",  /*  12: brblue   */
-    "#6c71c4",  /*  13: brmagenta*/
-    "#93a1a1",  /*  14: brcyan   */
-    "#fdf6e3",  /*  15: brwhite  */
+   [0] = "#282828", /* hard contrast: #1d2021 / soft contrast: #32302f */
+   [1] = "#cc241d", /* red     */
+   [2] = "#98971a", /* green   */
+   [3] = "#d79921", /* yellow  */
+   [4] = "#458588", /* blue    */
+   [5] = "#b16286", /* magenta */
+   [6] = "#689d6a", /* cyan    */
+   [7] = "#ebdbb2", /* white   */
+ 
+   /* 8 bright colors */
+   [8]  = "#fbf1c7", /* black   */
+   [9]  = "#cc241d", /* red     */
+   [10] = "#98971a", /* green   */
+   [11] = "#d79921", /* yellow  */
+   [12] = "#458588", /* blue    */
+   [13] = "#b16286", /* magenta */
+   [14] = "#689d6a", /* cyan    */
+   [15] = "#3c3836", /* white   */
 
-    [255] = 0,  /* other colors follow */
+   [255] = 0,  /* other colors follow */
 
-    "#000000",  /* 256: background */
-    "#fbfbfb",  /* 257: foreground */
+
 };
 
 /**
  * Default colors (colorname index)
  * foreground, background, cursor
  */
-static unsigned int defaultfg = 257;
-static unsigned int defaultbg = 256;
-static unsigned int defaultcs = 14;
-static unsigned int defaultrcs = 257;
+static unsigned int defaultfg = 7;
+static unsigned int defaultbg = 0;
+static unsigned int defaultcs = 7;
+static unsigned int defaultrcs = 255;
 
 /*
  * Default shape of cursor

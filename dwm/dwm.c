@@ -1091,6 +1091,7 @@ int drawstatusbar(Monitor *m, int bh, char *stext) {
     x = m->ww - w - getsystraywidth();
   }
 
+
   drw_setscheme(drw, scheme[LENGTH(colors)]);
   drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
   drw->scheme[ColBg] = scheme[SchemeNorm][ColBg];
@@ -2032,7 +2033,7 @@ void manage(Window w, XWindowAttributes *wa) {
   c->oldbw = wa->border_width;
   c->cfact = 1.0;
 
- 	updateicon(c);
+  updateicon(c);
   updatetitle(c);
   if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
     c->mon = t->mon;

@@ -35,16 +35,18 @@ static const int new_window_attach_on_end = 0; /*  1 means the new window will a
 static const char *fonts[]          = {"BigBlueTerm437NerdFont:style:regular:size=9"};
 
 // theme
-#include "themes/onedark.h"
+//#include "themes/dracula.h"
+#include "themes/gruvbox.h"
+
 
 static const char *colors[][3]      = {
     /*                     fg       bg      border */
-    [SchemeNorm]       = { gray3,   black,  gray2 },
-    [SchemeSel]        = { gray4,   blue,   blue  },
+    [SchemeNorm]       = { gray3,   black,  gray2 },  // inactive window
+    [SchemeSel]        = { gray4,   blue,   blue  }, // active window
     [SchemeTitle]      = { pink,    black,  black }, // active window title in bar
     [TabSel]           = { pink,    gray2,  black },
     [TabNorm]          = { gray3,   black,  black },
-    [SchemeTag]        = { gray3,   black,  black },
+    [SchemeTag]        = { gray3,   black,  black }, //tag with no windows
     [SchemeTag1]       = { blue,    black,  black },
     [SchemeTag2]       = { red,     black,  black },
     [SchemeTag3]       = { orange,  black,  black },
@@ -151,8 +153,8 @@ static const Key keys[] = {
     { MODKEY,                           XK_c,       spawn,          SHCMD("firefox")},
     { MODKEY,                           XK_v,       spawn,          SHCMD("qutebrowser")},
     { MODKEY,                           XK_b,       spawn,          SHCMD("st -e mc")},
-    { MODKEY,                           XK_n,       spawn,          SHCMD("qutebrowser")},
-    { MODKEY,                           XK_m,       spawn,          SHCMD("firefox")},
+    { MODKEY,                           XK_n,       spawn,          SHCMD("st")},
+    { MODKEY,                           XK_m,       spawn,          SHCMD("st")},
 
     // toggle top bar
     { MODKEY|ShiftMask,                 XK_b,       togglebar,      {0} },
