@@ -32,14 +32,14 @@ battery() {
   if [ "$get_status" = "Charging" ]; then
     printf "^c$green^  $get_capacity%%"
   else 
-    printf "^c$white^ 󰂀 $get_capacity%%"
+    printf "^c$yellow^ 󰂀 $get_capacity%%"
   fi  
 }
 
 brightness() {
   bright_val=$(cat /sys/class/backlight/*/brightness)
   
-  printf "^c$yellow^ 󰃟 $bright_val"
+  printf "^c$orange^ 󰃟 $bright_val"
 }
 
 
@@ -48,7 +48,7 @@ audio() {
    mute_val=$(amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $4 }')
   
   case "$mute_val" in
-    on)  printf "^c$orange^ 󰕿 $audio_val%" ;;
+    on)  printf "^c$white^ 󰕿 $audio_val%" ;;
     off) printf "^c$red^ 󰕿 X " ;; # 󰕾 󰕿 󰖀 󰝞 󰝟 󰖁 󰝝 󱄠 󱄡 󰸈
   esac
 }
@@ -69,8 +69,8 @@ wlan() {
 
   case "$wifi_val" in
     up)      printf "^c$blue^ 󰤨 ^d^%s" " ^c$blue^Connected" ;;
-    dormant) printf "^c$red^ 󰤯 ^d^%s" " ^c$blue^NoConnect" ;;
-    down)    printf "^c$red^ 󰤯 ^d^%s" " ^c$blue^NoConnect" ;;
+    dormant) printf "^c$red^ 󰤯 ^d^%s" " ^c$blue ^NoConnect" ;;
+    down)    printf "^c$red^ 󰤯 ^d^%s" " ^c$blue ^NoConnect" ;;
   esac
 }
 
@@ -82,8 +82,8 @@ clock() {
 
 while true; do
 
-	sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(audio) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
-
+  sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(audio) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
+  
   [ $interval = 0 ] || [ $(($interval % 3600)) = 0 ] && updates=$(pkg_updates)
   interval=$((interval + 1))
 
