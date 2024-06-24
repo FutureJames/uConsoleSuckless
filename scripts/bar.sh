@@ -12,14 +12,14 @@ interval=0
 cpu() {
   cpu_avg=$(grep -o "^[^ ]*" /proc/loadavg)
   cpu_per=$(mpstat | grep all | awk '{printf("%.0f\n", 100-$13)}')
-  printf "^c$green^  $cpu_per%%"
+  printf "^c$white^  $cpu_per%%"
 }
 
 pkg_updates() {
   updates=$(timeout 20 sudo apt update | awk '/packages can be/ {print $1}')
 
   if [ -z "$updates" ]; then
-    printf "^c$grey^  Fully Updated"
+    printf "^c$white^  Fully Updated"
   else
     printf "^c$red^  $updates"" updates"
   fi
@@ -28,18 +28,30 @@ pkg_updates() {
 battery() {
   get_capacity="$(cat /sys/class/power_supply/axp20x-battery/capacity)"
   get_status="$(cat /sys/class/power_supply/axp20x-battery/status)"
-
+  cutoff_val=15
+  
   if [ "$get_status" = "Charging" ]; then
     printf "^c$green^  $get_capacity%%"
-  else 
-    printf "^c$yellow^ 󰂀 $get_capacity%%"
+  else
+    if [ "$bright_val" -lt "$cutoff_val" ]
+      then
+        printf "^c$red^ 󰂀 $get_capacity%%"
+      else
+        printf "^c$white^ 󰂀 $get_capacity%%"
+    fi
   fi  
 }
 
 brightness() {
   bright_val=$(cat /sys/class/backlight/*/brightness)
-  
-  printf "^c$orange^ 󰃟 $bright_val"
+  cutoff_val=10
+
+  if [ "$bright_val" -gt "$cutoff_val" ]
+    then
+      printf "^c$red^ 󰃟 $bright_val"
+    else
+      printf "^c$white^ 󰃟 $bright_val"
+  fi
 }
 
 
@@ -56,21 +68,22 @@ audio() {
 disk() {
   disk_val=$(df / | awk '/dev\/root/ {print $5}')
   
-  printf "^c$aqua^  $disk_val%"
+  printf "^c$white^  $disk_val%"
 }	
 
 mem() {
   mem_per=$(free | grep Mem | awk '{printf("%.0f\n", (1-($7/$2)) * 100)}')
-  printf "^c$purple^  $mem_per%%"
+  printf "^c$white^  $mem_per%%"
 }
 
 wlan() {
-  wifi_val=$(cat /sys/class/net/wlan0/operstate 2>/dev/null)	
+  wifi_val=$(cat /sys/class/net/wlan0/operstate 2>/dev/null)
+  ip=$(hostname -I | awk '{print $1}')
 
   case "$wifi_val" in
-    up)      printf "^c$blue^ 󰤨 ^d^%s" " ^c$blue^Connected" ;;
-    dormant) printf "^c$red^ 󰤯 ^d^%s" " ^c$blue ^NoConnect" ;;
-    down)    printf "^c$red^ 󰤯 ^d^%s" " ^c$blue ^NoConnect" ;;
+    up)      printf "^c$white^ 󰤨 ^d^%s" " ^c$white^$ip" ;;
+    dormant) printf "^c$red^ 󰤯 ^d^%s" " ^c$red^Not Connected" ;;
+    down)    printf "^c$red^ 󰤯 ^d^%s" " ^c$red^Not Connected" ;;
   esac
 }
 
